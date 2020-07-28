@@ -1,28 +1,32 @@
 package com.construction.controllers;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.construction.models.Bookings;
+import com.construction.models.User;
 import com.construction.repository.CommissionsRepository;
 import com.construction.repository.UserRepository;
 import com.construction.responses.GlobalResponseData;
 import com.construction.responses.GlobalResponseListData;
+import com.construction.service.AdminService;
 import com.construction.service.BookingService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/booking")
-public class BookingsController {
+@RequestMapping("/admin")
+public class AdminController {
 
 	@Autowired
 	BookingService bookingService;
@@ -32,6 +36,9 @@ public class BookingsController {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	AdminService adminService;
 
 	@Autowired
 	ObjectMapper mapper;
@@ -40,34 +47,70 @@ public class BookingsController {
 
 	GlobalResponseListData globalResponseListData;
 
+	
+	@GetMapping("/getbyid/{id}")
+	public ResponseEntity<GlobalResponseData> getUserById(@PathVariable("id") Long id) {
+		return adminService.getUserById(id);
+	}
+	
+	@GetMapping("/getall")
+	public ResponseEntity<GlobalResponseListData> getAllUsers() {
+		return adminService.getAllUsers();
+	}
+	
+	@PutMapping("/updatebyid/{id}")
+	public ResponseEntity<GlobalResponseData> updateUser(@PathVariable("id") Long id, @RequestBody User newUser) {
+		
+			return adminService.updateUser(id, newUser);
+	}
+	
+	@DeleteMapping("/deletebyid/{id}")
+	public ResponseEntity<GlobalResponseData> deleteUserById(@PathVariable("id") Long id) {
+		return adminService.deleteUserById(id);
+	}
+	
+	@PutMapping("/userenabledisable/{id}")
+	public ResponseEntity<GlobalResponseData> userEnableDisable(@PathVariable("id") Long id, @RequestBody Map<String,Boolean> newEnable)
+	{
+		return adminService.userEnableDisable(id,newEnable.get("isEnable"));
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// 1. GET ALL BOOKING
 
 	
-	@GetMapping("/getall")
+	@GetMapping("/booking/getall")
 	public ResponseEntity<GlobalResponseListData> getAllBookings() {
 		return bookingService.getAllBookings();
 	}
-	@GetMapping("/getbyid/{id}")
+	@GetMapping("/booking/getbyid/{id}")
 	public ResponseEntity<GlobalResponseData> getBookingById(@PathVariable("id") Integer id) {
 		return bookingService.getBookingById(id);
 
 	}
-	@PostMapping("/add")
-	public ResponseEntity<GlobalResponseData> addBooking(@RequestBody Bookings add) 
-	{
-		return bookingService.addBooking(add);
-	}
-
-	@PutMapping("/updatebyid/{id}")
+	@PutMapping("/booking/updatebyid/{id}")
 	public ResponseEntity<GlobalResponseData> updateBooking(@PathVariable("id") Integer id, @RequestBody Bookings newBooking) {
 		
 			return bookingService.updateBooking(id, newBooking);
 	}	
 	
-	@GetMapping("/getbyusername")
-	public ResponseEntity<GlobalResponseListData> getBookingsByUsername() {
-		return bookingService.getBookingsByUsername();
-	}
+	
 
 //	//4. UPDATE BOOKINGS BY ID
 //	

@@ -1,5 +1,5 @@
 package com.construction.models;
-import java.util.Date;
+import java.sql.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,8 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "bookings")
@@ -23,12 +21,10 @@ public class Bookings
 	@SequenceGenerator(name = "BOOKING_SEQ", sequenceName = "BOOKING_SEQ", allocationSize = 1 )
 	private Integer bookingId;
 	
-	@Column(name = "bookingFrom",columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP" ,nullable=false)
-	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "bookingFrom",nullable=false)
 	private Date bookingFrom;
 	
-	@Column(name = "bookingTo",columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP" ,nullable=false)
-	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "bookingTo",nullable=false)
 	private Date bookingTo;
 	
 	@Column(name="status")
@@ -119,21 +115,16 @@ public class Bookings
 	public void setEmployee(User employee) {
 		this.employee = employee;
 	}
-
 	public Rating getRating() {
 		return rating;
 	}
-
 	public void setRating(Rating rating) {
 		this.rating = rating;
 	}
 	
 	
-
 //	@OneToOne(mappedBy="addressId")
-//	private Employees employees;
-	
+//	private Employees employees;	
 //	@OneToOne(mappedBy="addressId")
 //	private Users users;
-
 }

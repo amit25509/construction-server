@@ -10,16 +10,10 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import com.construction.models.Address;
-import com.construction.models.EmployeeData;
-import com.construction.models.Locations;
+
 import com.construction.models.User;
-import com.construction.repository.AddressRepository;
-import com.construction.repository.EmployeeDataRepository;
-import com.construction.repository.LocationsRepository;
 import com.construction.repository.UserRepository;
 import com.construction.responses.GlobalResponseData;
-import com.construction.responses.GlobalResponseListData;
 
 @Service
 public class UserService {
@@ -88,8 +82,7 @@ public class UserService {
 				newUser.setEmployeeData(tempUser.getEmployeeData());
 			}
 			*/
-			
-			
+			newUser.setUsername(String.valueOf(newUser.getPhone()));
 			userRepository.save(newUser);
 			globalResponseData =new GlobalResponseData(true, 201, "success",newUser);
 			return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);

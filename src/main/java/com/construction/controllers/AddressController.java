@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.construction.models.Address;
-import com.construction.models.User;
 import com.construction.repository.LocationsRepository;
 import com.construction.responses.GlobalResponseData;
-import com.construction.responses.GlobalResponseListData;
 import com.construction.service.AddressService;
 
 @CrossOrigin(origins = "*")

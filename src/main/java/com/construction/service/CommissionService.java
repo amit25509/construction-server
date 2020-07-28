@@ -94,6 +94,39 @@ public class CommissionService {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	public ResponseEntity<GlobalResponseListData> getCommissionTotals() {
+		String username = null;
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if (!(authentication instanceof AnonymousAuthenticationToken)) {
+				String currentUserName = authentication.getName();
+				username = currentUserName;
+			}
+		try {
+			if(username==null)
+			{
+				globalResponseListData = new GlobalResponseListData(false,401, "Failure: Authentication Failed");
+				return new ResponseEntity<>(globalResponseListData, HttpStatus.UNAUTHORIZED);
+			}
+			
+			List<Integer> totalData = commissionRepository.findcommissionsTotal(username);
+			for(int total: totalData)
+				System.out.println(total);
+			
+
+			if (totalData.isEmpty()) {
+				globalResponseListData = new GlobalResponseListData(false, 404, "Failure:Result Not Found");
+				return new ResponseEntity<>(globalResponseListData, HttpStatus.NOT_FOUND);
+			} else {
+				globalResponseListData = new GlobalResponseListData(true, 200, "success", null);
+				return new ResponseEntity<>(globalResponseListData, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			globalResponseListData = new GlobalResponseListData(false, 500, "Failure:Internal Server Error");
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 
 	public ResponseEntity<GlobalResponseData> addCommission(Commissions add) {
 		try {

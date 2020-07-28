@@ -1,5 +1,5 @@
 package com.construction.models;
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -76,7 +76,7 @@ public class User {
 	@JoinTable(	name = "user_roles", 
 				joinColumns = @JoinColumn(name = "user_id"), 
 				inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private Set<Role> roles = new HashSet<>();
+	private Set<Roles> roles = new HashSet<>();
 	
 	
 	@Column(name = "dob",columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -84,13 +84,22 @@ public class User {
 	
 	@Column(name = "is_enabled", columnDefinition ="BOOLEAN DEFAULT true")
 	private Boolean isEnabled;
+	
+	@Column(name = "created_date",columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	private Date createdDate;
+	
+	@Column(name = "last_modified_date",columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	private Date lastModifiedDate;
+	
+	
+	private String lastModifiedBy;
 
 	public User() {
 	}
 	
 	public User(String name, String username, String email,
 			String password, Long phone, Integer age,String image,Locations locationId,
-			Address addressId, EmployeeData employeeData,Date date, Boolean isEnabled) {
+			Address addressId, EmployeeData employeeData,Date date, Boolean isEnabled, Date createDate, Date lastModifiedDate, String lastModifiedBy) {
 		super();
 		this.name = name;
 		this.username = username;
@@ -104,6 +113,9 @@ public class User {
 		this.employeeData=employeeData;
 		this.dob=date;
 		this.isEnabled=isEnabled;
+		this.createdDate=createDate;
+		this.lastModifiedDate=lastModifiedDate;
+		this.lastModifiedBy=lastModifiedBy;
 	}
 
 	
@@ -147,11 +159,11 @@ public class User {
 		this.password = password;
 	}
 
-	public Set<Role> getRoles() {
+	public Set<Roles> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Set<Role> roles) {
+	public void setRoles(Set<Roles> roles) {
 		this.roles = roles;
 	}
 
@@ -209,12 +221,29 @@ public class User {
 	public void setDob(Date dob) {
 		this.dob = dob;
 	}
-
 	public Boolean getIsEnabled() {
 		return isEnabled;
 	}
-
 	public void setIsEnabled(Boolean isEnabled) {
 		this.isEnabled = isEnabled;
 	}
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+	public Date getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+	public void setLastModifiedDate(Date lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
+	public String getLastModifiedBy() {
+		return lastModifiedBy;
+	}
+	public void setLastModifiedBy(String lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
+	}
+	
 }

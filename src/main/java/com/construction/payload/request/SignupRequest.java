@@ -2,6 +2,7 @@ package com.construction.payload.request;
 import java.sql.Date;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -17,7 +18,7 @@ public class SignupRequest {
     @Email
     private String email;
     
-    private Set<String> role;
+    private Set<String> roles;
     
     @NotBlank
     @Size(min = 6, max = 40)
@@ -59,6 +60,13 @@ public class SignupRequest {
 	private Date dob;
 	
 	private Boolean isEnabled;
+	
+	private Date createdDate;
+	
+	private Date lastModifiedDate;
+	
+	
+	private String lastModifiedBy;
 
   
     public Date getDob() {
@@ -93,12 +101,12 @@ public class SignupRequest {
         this.password = password;
     }
     
-    public Set<String> getRole() {
-      return this.role;
+    public Set<String> getRoles() {
+      return this.roles;
     }
     
-    public void setRole(Set<String> role) {
-      this.role = role;
+    public void setRoles(Set<String> role) {
+      this.roles = role;
     }
 
 	public String getName() {
@@ -220,5 +228,4 @@ public class SignupRequest {
 	public void setIsEnabled(Boolean isEnabled) {
 		this.isEnabled = isEnabled;
 	}
-
 }
