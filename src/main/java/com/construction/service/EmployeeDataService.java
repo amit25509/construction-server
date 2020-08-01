@@ -28,18 +28,8 @@ public class EmployeeDataService {
 		Optional<EmployeeData> existningEmployeeData = employeeDataRepository.findById(id);
 
 		if (existningEmployeeData.isPresent()) {
-			EmployeeData tempEmployeeData = existningEmployeeData.get();
-			tempEmployeeData.setExperience(updateEmployeeData.getExperience());
-			tempEmployeeData.setCommissionRate(updateEmployeeData.getCommissionRate());
-			tempEmployeeData.setVerified(updateEmployeeData.isVerified());
-			tempEmployeeData.setOccupation(updateEmployeeData.getOccupation());
-			tempEmployeeData.setAvailability(updateEmployeeData.isAvailability());
-			tempEmployeeData.setJobStartDate(updateEmployeeData.getJobStartDate());
-			tempEmployeeData.setAadharFront(updateEmployeeData.getAadharFront());
-			tempEmployeeData.setAadharBack(updateEmployeeData.getAadharBack());
-			tempEmployeeData.setRating(updateEmployeeData.getRating());
-			employeeDataRepository.save(tempEmployeeData);
-			globalResponseData =new GlobalResponseData(true, 201, "success",tempEmployeeData);
+			employeeDataRepository.save(updateEmployeeData);
+			globalResponseData =new GlobalResponseData(true, 201, "success",updateEmployeeData);
 			return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);
 		}
 		else {

@@ -103,7 +103,7 @@ public class AuthService {
 		}
 
 		signUpRequest.setIsEnabled(true);
-		signUpRequest.getEmployeeData().setVerified(false);
+//		signUpRequest.getEmployeeData().setVerified(false);
 		Date createdDate= new Date();
 		Date lastModifiedDate=new Date();
 		

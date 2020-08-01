@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.construction.models.Bookings;
 import com.construction.models.Commissions;
 import com.construction.repository.CommissionsRepository;
 import com.construction.responses.GlobalResponseData;
@@ -95,37 +96,37 @@ public class CommissionService {
 		}
 	}
 	
-	public ResponseEntity<GlobalResponseListData> getCommissionTotals() {
-		String username = null;
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			if (!(authentication instanceof AnonymousAuthenticationToken)) {
-				String currentUserName = authentication.getName();
-				username = currentUserName;
-			}
-		try {
-			if(username==null)
-			{
-				globalResponseListData = new GlobalResponseListData(false,401, "Failure: Authentication Failed");
-				return new ResponseEntity<>(globalResponseListData, HttpStatus.UNAUTHORIZED);
-			}
-			
-			List<Integer> totalData = commissionRepository.findcommissionsTotal(username);
-			for(int total: totalData)
-				System.out.println(total);
-			
-
-			if (totalData.isEmpty()) {
-				globalResponseListData = new GlobalResponseListData(false, 404, "Failure:Result Not Found");
-				return new ResponseEntity<>(globalResponseListData, HttpStatus.NOT_FOUND);
-			} else {
-				globalResponseListData = new GlobalResponseListData(true, 200, "success", null);
-				return new ResponseEntity<>(globalResponseListData, HttpStatus.OK);
-			}
-		} catch (Exception e) {
-			globalResponseListData = new GlobalResponseListData(false, 500, "Failure:Internal Server Error");
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+//	public ResponseEntity<GlobalResponseListData> getCommissionTotals() {
+//		String username = null;
+//			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//			if (!(authentication instanceof AnonymousAuthenticationToken)) {
+//				String currentUserName = authentication.getName();
+//				username = currentUserName;
+//			}
+//		try {
+//			if(username==null)
+//			{
+//				globalResponseListData = new GlobalResponseListData(false,401, "Failure: Authentication Failed");
+//				return new ResponseEntity<>(globalResponseListData, HttpStatus.UNAUTHORIZED);
+//			}
+//			
+//			List<Integer> totalData = commissionRepository.findcommissionsTotal(username);
+//			for(int total: totalData)
+//				System.out.println(total);
+//			
+//
+//			if (totalData.isEmpty()) {
+//				globalResponseListData = new GlobalResponseListData(false, 404, "Failure:Result Not Found");
+//				return new ResponseEntity<>(globalResponseListData, HttpStatus.NOT_FOUND);
+//			} else {
+//				globalResponseListData = new GlobalResponseListData(true, 200, "success", null);
+//				return new ResponseEntity<>(globalResponseListData, HttpStatus.OK);
+//			}
+//		} catch (Exception e) {
+//			globalResponseListData = new GlobalResponseListData(false, 500, "Failure:Internal Server Error");
+//			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
+//	}
 
 
 	public ResponseEntity<GlobalResponseData> addCommission(Commissions add) {
@@ -135,7 +136,8 @@ public class CommissionService {
 					add.getBookingId(),
 					add.getTotalCommissionAmount(),
 					add.getDueCommissionAmount(),
-					add.getCommissionStatus()
+					add.getCommissionStatus(),
+					add.getPaidCommissionAmount()
 					)); 
 			System.out.println("inside try commission-2");
 			globalResponseData= new GlobalResponseData(true, 200, "success",commission);
@@ -147,4 +149,21 @@ public class CommissionService {
 		}
 	}
 	
+	public ResponseEntity<GlobalResponseData> updateCommission(Integer id, Commissions newCommission) {
+		// TODO Auto-generated method stub
+		
+		Optional<Commissions> existingCommission = commissionRepository.findById(id);
+
+		if (existingCommission.isPresent()) {
+			commissionRepository.save(newCommission);
+			globalResponseData =new GlobalResponseData(true, 201, "success",newCommission);
+			return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);
+		}
+		else {
+			
+			globalResponseData = new GlobalResponseData(false, 404, "Failure:Result Not Found");
+			return new ResponseEntity<>(globalResponseData,HttpStatus.NOT_FOUND);
+		}
+	}
+
 }

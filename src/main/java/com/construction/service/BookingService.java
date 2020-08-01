@@ -129,12 +129,9 @@ public class BookingService {
 
 			Optional<User> user = userRepository.findById(addBooking.getEmployee().getId());
 
-			int totalCommissionAmount = daysWorked * user.get().getEmployeeData().getCommissionRate();
-			commissionRepository.save(new Commissions(
-					bookings, 
-					totalCommissionAmount, 
-					totalCommissionAmount, 
-					"Pending"));
+			int totalCommissionAmount = daysWorked * user.get().getEmployeeData().getOccupation().getCommissionRate();
+			commissionRepository.save(new Commissions(bookings, 0, 0, "pending",0));
+			
 			globalResponseData= new GlobalResponseData(true, 200, "success",bookings);
 			return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);
 		} catch (Exception e) {

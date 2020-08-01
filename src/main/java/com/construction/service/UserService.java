@@ -1,7 +1,10 @@
 package com.construction.service;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,11 +12,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.construction.models.Commissions;
 import com.construction.models.User;
 import com.construction.repository.UserRepository;
 import com.construction.responses.GlobalResponseData;
+import com.construction.responses.GlobalResponseListData;
 
 @Service
 public class UserService {
@@ -21,6 +27,11 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 	GlobalResponseData globalResponseData;
+	
+	GlobalResponseListData globalResponseListData;
+	
+	@Autowired
+	PasswordEncoder encoder;
 	
 	public ResponseEntity<GlobalResponseData> getUserByUsername() {
 		String username = null;
@@ -93,4 +104,47 @@ public class UserService {
 			return new ResponseEntity<>(globalResponseData,HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	
+	
+	
+	
+	public ResponseEntity<GlobalResponseData> updateUserById(Long id, User updatedUser) {
+		// TODO Auto-generated method stub
+		
+		Optional<User> existingUser = userRepository.findById(id);
+		updatedUser.setUsername(updatedUser.getPhone().toString());
+		updatedUser.setPassword(encoder.encode(updatedUser.getPassword()));
+		
+		if (existingUser.isPresent()) {
+			userRepository.save(updatedUser);
+			globalResponseData =new GlobalResponseData(true, 201, "success",updatedUser);
+			return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);
+		}
+		else {
+			
+			globalResponseData = new GlobalResponseData(false, 404, "Failure:Result Not Found");
+			return new ResponseEntity<>(globalResponseData,HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	public ResponseEntity<GlobalResponseListData> getByOccupation(Integer occupationId) {
+		
+		try {
+			List<User> users = userRepository.getByOccupation(occupationId);
+
+			if (users.isEmpty()) {
+				globalResponseListData = new GlobalResponseListData(false, 404, "Failure:Result Not Found");
+				return new ResponseEntity<>(globalResponseListData, HttpStatus.NOT_FOUND);
+			} else {
+				globalResponseListData = new GlobalResponseListData(true, 200, "success", users);
+				return new ResponseEntity<>(globalResponseListData, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			globalResponseListData = new GlobalResponseListData(false, 500, "Failure:Internal Server Error");
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+	}
+
 }

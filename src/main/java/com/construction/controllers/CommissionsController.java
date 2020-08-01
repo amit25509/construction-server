@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -64,23 +65,13 @@ public class CommissionsController {
 //	}
 	
 	
-	
-	
-	
-	
-//	
-//
-//	//4. UPDATE COMMISSIONS BY ID
-//	
-//	@PutMapping("/updatecommissions/{id}")
-//	public ResponseEntity<Commissions> updateCommissions(@PathVariable("id") Integer id, @RequestBody Commissions newUpdateCommissions) {
-//		
-//		return commissionsService.updateCommissions(id, newUpdateCommissions);
-//		
-//	}
-//	
-//
-//	
+	//4. UPDATE COMMISSIONS BY ID
+	@PutMapping("/updatebyid/{id}")
+	public ResponseEntity<GlobalResponseData> updateCommissions(@PathVariable("id") Integer id, @RequestBody Commissions newUpdateCommissions) {
+		
+		return commissionService.updateCommission(id, newUpdateCommissions);
+		
+	}	
 //	//5. DELETE COMMISSIONS BY ID
 //	
 //	@DeleteMapping("/deletecommissions/{id}")

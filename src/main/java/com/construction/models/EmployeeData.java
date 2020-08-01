@@ -1,11 +1,14 @@
 package com.construction.models;
 import java.sql.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,14 +21,11 @@ public class EmployeeData {
 	@Column(name = "experience")
 	private String experience;
 	
-	@Column(name = "commission_rate")
-	private Integer commissionRate;
-	
 	@Column(name = "is_Verified")
 	private boolean isVerified;
 	
-	@Column(name = "occupation")
-	private String occupation;
+//	@Column(name = "occupation")
+//	private Occu occupation;
 		
 	@Column(name = "availability")
 	private boolean availability;
@@ -41,17 +41,23 @@ public class EmployeeData {
 	
 	@Column(name = "rating")
 	private Double rating;
+	
+	@Column(name= "per_day_charge")
+	private Integer perDayCharge;
+	
+	@OneToOne(targetEntity = Occupation.class)
+	@JoinColumn(name="occupation", referencedColumnName = "occupationId")
+	private Occupation occupation;
 
 	public EmployeeData() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public EmployeeData(String experience, Integer commissionRate, boolean isVerified, String occupation,
-			boolean availability, Date jobStartDate, String aadharFront, String aadharBack, Double rating) {
+	public EmployeeData(String experience, boolean isVerified, Occupation occupation,
+			boolean availability, Date jobStartDate, String aadharFront, String aadharBack, Double rating,Integer perDayCharge ) {
 		super();
 		this.experience = experience;
-		this.commissionRate = commissionRate;
 		this.isVerified = isVerified;
 		this.occupation = occupation;
 		this.availability = availability;
@@ -59,6 +65,7 @@ public class EmployeeData {
 		this.aadharFront = aadharFront;
 		this.aadharBack = aadharBack;
 		this.rating=rating;
+		this.perDayCharge=perDayCharge;
 	}
 
 	public Integer getId() {
@@ -77,14 +84,6 @@ public class EmployeeData {
 		this.experience = experience;
 	}
 
-	public Integer getCommissionRate() {
-		return commissionRate;
-	}
-
-	public void setCommissionRate(Integer commissionRate) {
-		this.commissionRate = commissionRate;
-	}
-
 	public boolean isVerified() {
 		return isVerified;
 	}
@@ -93,11 +92,11 @@ public class EmployeeData {
 		this.isVerified = isVerified;
 	}
 
-	public String getOccupation() {
+	public Occupation getOccupation() {
 		return occupation;
 	}
 
-	public void setOccupation(String occupation) {
+	public void setOccupation(Occupation occupation) {
 		this.occupation = occupation;
 	}
 
@@ -140,6 +139,12 @@ public class EmployeeData {
 	public void setRating(Double rating) {
 		this.rating = rating;
 	}
-	
-	
+
+	public Integer getPerDayCharge() {
+		return perDayCharge;
+	}
+
+	public void setPerDayCharge(Integer perDayCharge) {
+		this.perDayCharge = perDayCharge;
+	}
 }

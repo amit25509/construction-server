@@ -28,6 +28,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query(value="update users set is_enabled=:isEnabled where id=:id",nativeQuery = true)
 	void userEnableDisable(@Param("id") Long id, @Param("isEnabled") boolean isEnabled);
 	
+	@Query(value="select * from users where employee_data in (select id from employee_data where occupation=(select occupation_id from occupation where occupation_id=:occupationId))",nativeQuery = true)
+	List<User> getByOccupation(@Param("occupationId") Integer occupationId);
+	
+	
+	
 	
 	
 }

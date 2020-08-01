@@ -37,9 +37,6 @@ public class AuthController {
 	LocationsRepository locationRepository;
 
 	@Autowired
-	PasswordEncoder encoder;
-
-	@Autowired
 	JwtUtils jwtUtils;
 	
 	@Autowired

@@ -82,7 +82,7 @@ public class User {
 	@Column(name = "dob",columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private Date dob;
 	
-	@Column(name = "is_enabled", columnDefinition ="BOOLEAN DEFAULT true")
+	@Column(name = "is_enabled", columnDefinition ="BIT DEFAULT 1")
 	private Boolean isEnabled;
 	
 	@Column(name = "created_date",columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

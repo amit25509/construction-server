@@ -42,6 +42,17 @@ public class UserDetailsImpl implements UserDetails {
 		this.isVerified=isVerified;
 		this.isEnabled=isEnabled;
 	}
+	
+	public UserDetailsImpl(Long id, String username, String email, String password,String name,
+			Collection<? extends GrantedAuthority> authorities,Boolean isEnabled) {
+		this.id = id;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.name=name;
+		this.authorities = authorities;
+		this.isEnabled=isEnabled;
+	}
 
 	public static UserDetailsImpl build(User user) {
 		List<GrantedAuthority> authorities = user.getRoles().stream()
@@ -58,6 +69,24 @@ public class UserDetailsImpl implements UserDetails {
 				user.getEmployeeData().isVerified(),
 				user.getIsEnabled());
 	}
+	
+	
+	
+	public static UserDetailsImpl buildUser(User user) {
+		List<GrantedAuthority> authorities = user.getRoles().stream()
+				.map(role -> new SimpleGrantedAuthority(role.getName().name()))
+				.collect(Collectors.toList());
+
+		return new UserDetailsImpl(
+				user.getId(), 
+				user.getUsername(), 
+				user.getEmail(),
+				user.getPassword(),
+				user.getName(),
+				authorities,
+				user.getIsEnabled());
+	}
+
 
 
 	@Override
