@@ -1,10 +1,7 @@
 package com.construction.service;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +12,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.construction.models.Commissions;
 import com.construction.models.User;
 import com.construction.repository.UserRepository;
 import com.construction.responses.GlobalResponseData;
@@ -47,9 +43,8 @@ public class UserService {
 				return new ResponseEntity<>(globalResponseData, HttpStatus.UNAUTHORIZED);
 			}
 			
-			List<User> user = userRepository.findListByUsername(username);
-
-			if (user.isEmpty()) {
+			Optional<User> user = userRepository.findByUsername(username);
+			if (!user.isPresent()) {
 				globalResponseData = new GlobalResponseData(false, 404, "Failure:Result Not Found");
 				return new ResponseEntity<>(globalResponseData, HttpStatus.NOT_FOUND);
 			} else {

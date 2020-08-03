@@ -58,12 +58,12 @@ public class User {
 	private String image;
 	
 	@OneToOne(targetEntity = Locations.class)
-	@JoinColumn(name="location_id", referencedColumnName = "locationId",nullable=false)
-	private Locations locationId;
+	@JoinColumn(name="location", referencedColumnName = "locationId",nullable=false)
+	private Locations location;
 	
 	@OneToOne(targetEntity = Address.class,cascade = CascadeType.ALL)
-	@JoinColumn(name="address_id", referencedColumnName = "addressId")
-	private Address addressId;
+	@JoinColumn(name="address", referencedColumnName = "addressId")
+	private Address address;
 	
 	@OneToOne(targetEntity = EmployeeData.class,cascade = CascadeType.ALL)
 	@JoinColumn(name="employeeData", referencedColumnName = "id")
@@ -98,8 +98,8 @@ public class User {
 	}
 	
 	public User(String name, String username, String email,
-			String password, Long phone, Integer age,String image,Locations locationId,
-			Address addressId, EmployeeData employeeData,Date date, Boolean isEnabled, Date createDate, Date lastModifiedDate, String lastModifiedBy) {
+			String password, Long phone, Integer age,String image,Locations location,
+			Address address, EmployeeData employeeData,Date date, Boolean isEnabled, Date createDate, Date lastModifiedDate, String lastModifiedBy) {
 		super();
 		this.name = name;
 		this.username = username;
@@ -108,8 +108,8 @@ public class User {
 		this.phone = phone;
 		this.age = age;
 		this.image = image;
-		this.locationId = locationId;
-		this.addressId = addressId;
+		this.location = location;
+		this.address = address;
 		this.employeeData=employeeData;
 		this.dob=date;
 		this.isEnabled=isEnabled;
@@ -190,20 +190,20 @@ public class User {
 		this.image = image;
 	}
 
-	public Locations getLocationId() {
-		return locationId;
+	public Locations getLocation() {
+		return location;
 	}
 
-	public void setLocationId(Locations locationId) {
-		this.locationId = locationId;
+	public void setLocation(Locations location) {
+		this.location = location;
 	}
 
-	public Address getAddressId() {
-		return addressId;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setAddressId(Address addressId) {
-		this.addressId = addressId;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	public EmployeeData getEmployeeData() {
