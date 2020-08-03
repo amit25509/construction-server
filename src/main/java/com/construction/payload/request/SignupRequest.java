@@ -51,9 +51,9 @@ public class SignupRequest {
 	
 	private String aadharBack;
 	
-	private Locations locationId;
+	private Locations location;
 	
-	private Address addressId;
+	private Address address;
 	
 	private EmployeeData employeeData;
 	
@@ -197,20 +197,20 @@ public class SignupRequest {
 		this.aadharBack = aadharBack;
 	}
 
-	public Locations getLocationId() {
-		return locationId;
+	public Locations getLocation() {
+		return location;
 	}
 
-	public void setLocationId(Locations locationId) {
-		this.locationId = locationId;
+	public void setLocation(Locations location) {
+		this.location = location;
 	}
 
-	public Address getAddressId() {
-		return addressId;
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setAddressId(Address addressId) {
-		this.addressId = addressId;
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	public EmployeeData getEmployeeData() {
