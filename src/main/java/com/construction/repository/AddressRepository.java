@@ -14,7 +14,7 @@ import com.construction.models.Address;
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Integer> 
 {
-	@Query(value="select * from address where address_id=(select address_id from users where username=:username)",nativeQuery = true)
+	@Query(value="select * from address where user=(select id from users where username=:username)",nativeQuery = true)
 	List<Address> findAddressByUsername(@Param("username")String username);
 	
 	@Query(value="select * from address where address_id=(select address_id from users where username=:username)",nativeQuery = true)

@@ -22,6 +22,7 @@ import com.construction.models.User;
 import com.construction.payload.request.LoginRequest;
 import com.construction.payload.request.SignupRequest;
 import com.construction.payload.response.JwtResponse;
+import com.construction.repository.AddressRepository;
 import com.construction.repository.LocationsRepository;
 import com.construction.repository.RoleRepository;
 import com.construction.repository.UserRepository;
@@ -48,6 +49,9 @@ public class AuthService {
 	
 	@Autowired
 	LocationsRepository locationRepository;
+	
+	@Autowired
+	AddressRepository addressRepository;
 
 	@Autowired
 	PasswordEncoder encoder;
@@ -107,6 +111,7 @@ public class AuthService {
 		Date createdDate= new Date();
 		Date lastModifiedDate=new Date();
 		
+		System.out.println("Adress-------------------"+signUpRequest.getAddress());
 		// Create new user's account
 		User user = new User(signUpRequest.getName(),
 							 userName, 
@@ -154,11 +159,12 @@ public class AuthService {
 				}
 			});
 		}
+		
 
 		user.setRoles(roles);
+		user.getAddress();
 		userRepository.save(user);
 		globalResponseData= new GlobalResponseData(true, 201, "success",user);
 		return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);
 	}
-	
 }

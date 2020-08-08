@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.construction.models.UpdatePassword;
 import com.construction.models.User;
 import com.construction.repository.UserRepository;
 import com.construction.responses.GlobalResponseData;
@@ -29,6 +30,7 @@ public class UserService {
 	@Autowired
 	PasswordEncoder encoder;
 	
+	//====================GET USER DETAILS BY USERNAME==========================
 	public ResponseEntity<GlobalResponseData> getUserByUsername() {
 		String username = null;
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -59,6 +61,7 @@ public class UserService {
 	
 	
 	
+	//====================UPDATE USER DETAILS BY USERNAME==========================
 	
 	public ResponseEntity<GlobalResponseData> updateUser(User newUser) {
 		// TODO Auto-generated method stub
@@ -102,7 +105,7 @@ public class UserService {
 	
 	
 	
-	
+	//====================UPDATE USER DETAILS BY USER ID==========================
 	
 	public ResponseEntity<GlobalResponseData> updateUserById(Long id, User updatedUser) {
 		// TODO Auto-generated method stub
@@ -123,10 +126,10 @@ public class UserService {
 		}
 	}
 	
-	public ResponseEntity<GlobalResponseListData> getByOccupation(Integer occupationId) {
+	public ResponseEntity<GlobalResponseListData> getByOccupation(String occupationName) {
 		
 		try {
-			List<User> users = userRepository.getByOccupation(occupationId);
+			List<User> users = userRepository.getByOccupation(occupationName);
 
 			if (users.isEmpty()) {
 				globalResponseListData = new GlobalResponseListData(false, 404, "Failure:Result Not Found");
@@ -140,6 +143,37 @@ public class UserService {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
+	}
+
+
+//====================UPDATE PASSWORD BY USER==========================
+
+	public ResponseEntity<GlobalResponseData> updatePassword(UpdatePassword updatedPassword) {
+	
+		
+		String username = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			String currentUserName = authentication.getName();
+			username = currentUserName;
+		}
+		
+		Optional<User> existingUser = userRepository.findByUsername(username);
+		if(encoder.matches(updatedPassword.getOldPassword(), existingUser.get().getPassword())) {
+			if (existingUser.isPresent()) {
+				User user=existingUser.get();
+				user.setPassword(encoder.encode(updatedPassword.getNewPassword()));
+				userRepository.save(user);
+				globalResponseData =new GlobalResponseData(true, 201, "success",user);
+			}
+			return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);
+		}
+		
+		else {
+			
+			globalResponseData = new GlobalResponseData(false, 404, "Failure:Result Not Found");
+			return new ResponseEntity<>(globalResponseData,HttpStatus.NOT_FOUND);
+		}
 	}
 
 }

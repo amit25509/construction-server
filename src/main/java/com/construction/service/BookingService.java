@@ -1,5 +1,7 @@
 package com.construction.service;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,11 +14,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.construction.models.Bookings;
 import com.construction.models.Commissions;
+import com.construction.models.Roles;
 import com.construction.models.User;
 import com.construction.repository.BookingsRepository;
 import com.construction.repository.CommissionsRepository;
@@ -71,22 +75,37 @@ public class BookingService {
 
 	public ResponseEntity<GlobalResponseListData> getBookingsByUsername() {
 		String username = null;
-		
-		
+		GrantedAuthority userRoles=null;
+		List<Bookings> bookings;
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			if (!(authentication instanceof AnonymousAuthenticationToken)) {
 				String currentUserName = authentication.getName();
 				username = currentUserName;
+				Collection<? extends GrantedAuthority> roles= authentication.getAuthorities();
+				
+				for (Iterator<? extends GrantedAuthority> it = roles.iterator(); it.hasNext(); ) {
+			        userRoles =  it.next();
+			        System.out.println("================================================="+userRoles);
+				}
 			}
+			
 		try {
 			if(username==null)
 			{
 				globalResponseListData = new GlobalResponseListData(false,401, "Failure: Authentication Failed");
 				return new ResponseEntity<>(globalResponseListData, HttpStatus.UNAUTHORIZED);
 			}
-			
-			List<Bookings> bookings = bookingRepository.findBookingsByUsername(username);
-			
+			if(userRoles.toString().equals("ROLE_EMPLOYEE"))
+			{
+				System.out.println("if================================================="+userRoles);
+				bookings = bookingRepository.findEmployeeBookingsByUsername(username);
+			}
+			else
+			{
+				System.out.println("else================================================="+userRoles);
+				bookings = bookingRepository.findUserBookingsByUsername(username);
+				
+			}
 			
 			if (bookings.isEmpty()) {
 				globalResponseListData = new GlobalResponseListData(false, 404, "Failure:Result Not Found");

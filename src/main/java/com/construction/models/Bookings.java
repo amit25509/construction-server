@@ -4,6 +4,7 @@ import java.sql.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "bookings")
@@ -33,15 +39,19 @@ public class Bookings
 	@Column(name="days_worked")
 	private Integer daysWorked;
 	
-	@OneToOne(targetEntity = User.class)
+	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
 	@JoinColumn(name="user", referencedColumnName = "Id")
+//	 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//    @JsonIdentityReference(alwaysAsId = true)
 	private User user;
 	
-	@OneToOne(targetEntity = User.class)
+	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
 	@JoinColumn(name="employee", referencedColumnName = "Id")
+//	 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+//    @JsonIdentityReference(alwaysAsId = true)
 	private User employee;
 	
-	@OneToOne(targetEntity = Rating.class, cascade = CascadeType.ALL)
+	@OneToOne(targetEntity = Rating.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name="rating", referencedColumnName = "Id")
 	private Rating rating;
 

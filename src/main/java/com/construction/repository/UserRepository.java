@@ -18,6 +18,7 @@ import com.construction.models.User;
 @Transactional
 public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findByUsername(String username);
+	User findUserByUsername(String username);
 	List<User> findListByUsername(String username);
 
 	Boolean existsByUsername(String username);
@@ -28,8 +29,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query(value="update users set is_enabled=:isEnabled where id=:id",nativeQuery = true)
 	void userEnableDisable(@Param("id") Long id, @Param("isEnabled") boolean isEnabled);
 	
-	@Query(value="select * from users where employee_data in (select id from employee_data where occupation=(select occupation_id from occupation where occupation_id=:occupationId))",nativeQuery = true)
-	List<User> getByOccupation(@Param("occupationId") Integer occupationId);
+	@Query(value="select * from users where employee_data in (select id from employee_data where occupation=(select occupation_id from occupation where occupation_name=:occupationName))",nativeQuery = true)
+	List<User> getByOccupation(@Param("occupationName") String occupationName);
 	
 	
 	

@@ -1,8 +1,8 @@
 package com.construction.payload.request;
 import java.sql.Date;
+import java.util.List;
 import java.util.Set;
 
-import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -53,7 +53,7 @@ public class SignupRequest {
 	
 	private Locations location;
 	
-	private Address address;
+	private List<Address> address;
 	
 	private EmployeeData employeeData;
 	
@@ -205,11 +205,11 @@ public class SignupRequest {
 		this.location = location;
 	}
 
-	public Address getAddress() {
+	public List<Address> getAddress() {
 		return address;
 	}
 
-	public void setAddress(Address address) {
+	public void setAddress(List<Address> address) {
 		this.address = address;
 	}
 

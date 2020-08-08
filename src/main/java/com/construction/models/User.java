@@ -1,6 +1,7 @@
 package com.construction.models;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -61,9 +63,16 @@ public class User {
 	@JoinColumn(name="location", referencedColumnName = "locationId",nullable=false)
 	private Locations location;
 	
-	@OneToOne(targetEntity = Address.class,cascade = CascadeType.ALL)
-	@JoinColumn(name="address", referencedColumnName = "addressId")
-	private Address address;
+//	@OneToOne(targetEntity = Address.class,cascade = CascadeType.ALL)
+//	@JoinColumn(name="address", referencedColumnName = "addressId")
+//	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+//	@JoinTable(	name = "user_address", 
+//		joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
+//		inverseJoinColumns = @JoinColumn(name = "address_id", referencedColumnName = "addressId"))
+	
+	@OneToMany(targetEntity = Address.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "user", referencedColumnName = "id")
+	private List<Address> address;
 	
 	@OneToOne(targetEntity = EmployeeData.class,cascade = CascadeType.ALL)
 	@JoinColumn(name="employeeData", referencedColumnName = "id")
@@ -99,7 +108,7 @@ public class User {
 	
 	public User(String name, String username, String email,
 			String password, Long phone, Integer age,String image,Locations location,
-			Address address, EmployeeData employeeData,Date date, Boolean isEnabled, Date createDate, Date lastModifiedDate, String lastModifiedBy) {
+			List<Address> address, EmployeeData employeeData,Date date, Boolean isEnabled, Date createDate, Date lastModifiedDate, String lastModifiedBy) {
 		super();
 		this.name = name;
 		this.username = username;
@@ -198,11 +207,11 @@ public class User {
 		this.location = location;
 	}
 
-	public Address getAddress() {
+	public List<Address> getAddress() {
 		return address;
 	}
 
-	public void setAddress(Address address) {
+	public void setAddress(List<Address> address) {
 		this.address = address;
 	}
 

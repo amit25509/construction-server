@@ -12,8 +12,10 @@ import com.construction.models.Bookings;
 public interface BookingsRepository extends JpaRepository<Bookings, Integer> 
 {	
 	@Query(value="select * from bookings where employee=(select id from users where username=:username) or user=(select id from users where username=:username)",nativeQuery = true)
-	List<Bookings> findBookingsByUsername(@Param("username")String username);
+	List<Bookings> findEmployeeBookingsByUsername(@Param("username")String username);
 	
+	@Query(value="select * from bookings where user=(select id from users where username=:username) or user=(select id from users where username=:username)",nativeQuery = true)
+	List<Bookings> findUserBookingsByUsername(@Param("username")String username);
 	
 	@Query(value="select rating from rating where employee=:employeeId",nativeQuery = true)
 //	ArrayList<HashMap<Integer, Integer>> findEmployeeRating(@Param("employeeId") Integer employeeId);

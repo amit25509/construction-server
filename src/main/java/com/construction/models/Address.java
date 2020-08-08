@@ -1,12 +1,18 @@
 package com.construction.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "address")
@@ -32,9 +38,17 @@ public class Address
 	@Column(name = "street")
 	private String street;
 	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user", referencedColumnName = "id")
+	private User user;
+	
+	@Column(name = "is_primary")
+	private Boolean isPrimary;
+	
 	public Address() {}
 	
-	public Address(Integer addressId, String buildingName, String city, Integer postalCode, String state, String street) {
+	public Address(Integer addressId, String buildingName, String city, Integer postalCode, String state, String street, Boolean isPrimary, User user ) {
 		super();
 		this.addressId = addressId;
 		this.buildingName = buildingName;
@@ -42,15 +56,18 @@ public class Address
 		this.postalCode = postalCode;
 		this.state = state;
 		this.street = street;
+		this.isPrimary=isPrimary;
+		this.user=user;
 	}
 	
-	public Address(String buildingName, String city, Integer postalCode, String state, String street) {
+	public Address(String buildingName, String city, Integer postalCode, String state, String street, Boolean isPrimary) {
 		super();
 		this.buildingName = buildingName;
 		this.city = city;
 		this.postalCode = postalCode;
 		this.state = state;
 		this.street = street;
+		this.isPrimary=isPrimary;
 	}
 
 	public Integer getAddressId() {
@@ -101,7 +118,24 @@ public class Address
 		this.street = street;
 	}
 
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Boolean getIsPrimary() {
+		return isPrimary;
+	}
+
+	public void setIsPrimary(Boolean isPrimary) {
+		this.isPrimary = isPrimary;
+	}
 	
+	
+
 	
 //	@OneToOne(mappedBy="addressId")
 //	private Employees employees;

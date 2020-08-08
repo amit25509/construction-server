@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.construction.models.Commissions;
+import com.construction.models.UpdatePassword;
 import com.construction.models.User;
 import com.construction.responses.GlobalResponseData;
 import com.construction.responses.GlobalResponseListData;
@@ -46,9 +46,14 @@ public class UserController {
 		
 	}	
 	
-	@GetMapping("/getallbyoccupation/{occupationId}")
-	public ResponseEntity<GlobalResponseListData> getAllUsers(@PathVariable("occupationId") Integer occupationId) {
-		return userService.getByOccupation(occupationId);
+	@GetMapping("/getallbyoccupation/{occupationName}")
+	public ResponseEntity<GlobalResponseListData> getAllUsers(@PathVariable("occupationName") String occupationName) {
+		return userService.getByOccupation(occupationName);
+	}
+	
+	@PutMapping("/updatepassword")
+	public ResponseEntity<GlobalResponseData> updatePassword(@RequestBody UpdatePassword updatedPassword) {
+		return userService.updatePassword(updatedPassword);
 	}
 	
 }

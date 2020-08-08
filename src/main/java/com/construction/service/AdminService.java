@@ -130,13 +130,8 @@ public class AdminService {
 	}
 	
 	public ResponseEntity<GlobalResponseData> deleteUserById(Long id) {
-		
-		
 		try {
-			
-			
 			Optional<User> user = userRepository.findById(id);
-
 			if (user.isPresent()) {
 				userRepository.deleteById(id);;
 				globalResponseData = new GlobalResponseData(true, 200, "success", null);
