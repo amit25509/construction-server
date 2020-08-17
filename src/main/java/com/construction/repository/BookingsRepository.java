@@ -17,7 +17,7 @@ public interface BookingsRepository extends JpaRepository<Bookings, Integer>
 	@Query(value="select * from bookings where user=(select id from users where username=:username) or user=(select id from users where username=:username)",nativeQuery = true)
 	List<Bookings> findUserBookingsByUsername(@Param("username")String username);
 	
-	@Query(value="select rating from rating where employee=:employeeId",nativeQuery = true)
+	@Query(value="select rating from rating where employee=:employeeId and rating is not null",nativeQuery = true)
 //	ArrayList<HashMap<Integer, Integer>> findEmployeeRating(@Param("employeeId") Integer employeeId);
 	List<Integer> findEmployeeRating(@Param("employeeId") Long employeeId);
 }

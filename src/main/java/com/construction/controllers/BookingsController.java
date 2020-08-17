@@ -69,27 +69,10 @@ public class BookingsController {
 		return bookingService.getBookingsByUsername();
 	}
 
-//	//4. UPDATE BOOKINGS BY ID
-//	
-//	@PutMapping("/updatebookings/{id}")
-//	public ResponseEntity<Bookings> updateBookings(@PathVariable("id") Integer id, @RequestBody Bookings updateBookings) {
-//		
-//		return bookingsService.updateBookings(id, updateBookings);
-//		
-//	}
-//	
-//
-//	
-//	//5. DELETE BOOKINGS BY ID
-//	
-//	@DeleteMapping("/deletebooking/{id}")
-//	private ResponseEntity<HttpStatus> deleteBooking(@PathVariable("id") int id) {
-//		try {
-//			bookingsService.deleteBookings(id);
-//			return new ResponseEntity<>(HttpStatus.OK);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
-//		}
-//	}
-
+	@PutMapping("/updateratingbyid/{id}")
+	public ResponseEntity<GlobalResponseData> updateRating(@PathVariable("id") Integer id, @RequestBody Bookings bookingRating)
+	{
+		return bookingService.updateRating(id,bookingRating);
+	}
+	
 }

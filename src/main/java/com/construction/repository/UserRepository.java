@@ -20,6 +20,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findByUsername(String username);
 	User findUserByUsername(String username);
 	List<User> findListByUsername(String username);
+	
+	@Query(value="SELECT name FROM users WHERE id in (select user_id from user_roles where role_id=2)",nativeQuery = true)
+	List<String> findAllEmployees();
 
 	Boolean existsByUsername(String username);
 

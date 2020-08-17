@@ -61,9 +61,29 @@ public class UserService {
 	
 	
 	
+	//====================GET ALL EMPLOYEE USER==========================
+	public ResponseEntity<GlobalResponseListData> getAllEmployee() {
+		try {
+			
+			List<String> user = userRepository.findAllEmployees();
+			if (user.isEmpty()) {
+				globalResponseListData = new GlobalResponseListData(false, 404, "Failure:Result Not Found");
+				return new ResponseEntity<>(globalResponseListData, HttpStatus.NOT_FOUND);
+			} else {
+				globalResponseListData = new GlobalResponseListData(true, 200, "success", user);
+				return new ResponseEntity<>(globalResponseListData, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			globalResponseListData = new GlobalResponseListData(false, 500, "Failure:Internal Server Error");
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+
+	
 	//====================UPDATE USER DETAILS BY USERNAME==========================
 	
-	public ResponseEntity<GlobalResponseData> updateUser(User newUser) {
+	public ResponseEntity<GlobalResponseData> updateUser(User updatedUser) {
 		// TODO Auto-generated method stub
 		String username = null;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -71,9 +91,27 @@ public class UserService {
 			String currentUserName = authentication.getName();
 			username = currentUserName;
 		}
+		System.out.println("========================================"+username);
 		Optional<User> existingUser = userRepository.findByUsername(username);
 		if (existingUser.isPresent()) {
-			
+			existingUser.map(user -> {
+				user.setName(updatedUser.getName());
+				user.setAge(updatedUser.getAge());
+				user.setDob(updatedUser.getDob());
+				user.setEmail(updatedUser.getEmail());
+				if(updatedUser.getPhone() != null)
+					user.setPhone(updatedUser.getPhone());
+				if(updatedUser.getPhone() != null)
+					user.setUsername(updatedUser.getPhone().toString());
+				if(updatedUser.getPassword() != null)
+					user.setPassword(encoder.encode(updatedUser.getPassword()));
+				if(updatedUser.getLocation() != null)
+					user.setLocation(updatedUser.getLocation());
+				if(updatedUser.getEmployeeData() != null) {
+					user.setEmployeeData(updatedUser.getEmployeeData());
+				}
+	            return userRepository.save(user);
+	        });
 			
 			/*
 			 * FOR AVOIDING NULL VALUE FOR SPECIFIC FIELDS
@@ -91,9 +129,9 @@ public class UserService {
 				newUser.setEmployeeData(tempUser.getEmployeeData());
 			}
 			*/
-			newUser.setUsername(String.valueOf(newUser.getPhone()));
-			userRepository.save(newUser);
-			globalResponseData =new GlobalResponseData(true, 201, "success",newUser);
+//			newUser.setUsername(String.valueOf(newUser.getPhone()));
+//			userRepository.save(newUser);
+			globalResponseData =new GlobalResponseData(true, 201, "success",updatedUser);
 			return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);
 		}
 		else {
@@ -111,11 +149,26 @@ public class UserService {
 		// TODO Auto-generated method stub
 		
 		Optional<User> existingUser = userRepository.findById(id);
-		updatedUser.setUsername(updatedUser.getPhone().toString());
-		updatedUser.setPassword(encoder.encode(updatedUser.getPassword()));
 		
 		if (existingUser.isPresent()) {
-			userRepository.save(updatedUser);
+			existingUser.map(user -> {
+				user.setName(updatedUser.getName());
+				user.setAge(updatedUser.getAge());
+				user.setDob(updatedUser.getDob());
+				user.setEmail(updatedUser.getEmail());
+				if(updatedUser.getIsEnabled() != null)
+					user.setIsEnabled(updatedUser.getIsEnabled());
+				user.setPhone(updatedUser.getPhone());
+				user.setUsername(updatedUser.getPhone().toString());
+				if(updatedUser.getPassword() != null)
+					user.setPassword(encoder.encode(updatedUser.getPassword()));
+				user.setLocation(updatedUser.getLocation());
+				if(updatedUser.getRoles() != null)
+					user.setRoles(updatedUser.getRoles());
+	            return userRepository.save(user);
+	        });
+
+//			userRepository.save(updatedUser);
 			globalResponseData =new GlobalResponseData(true, 201, "success",updatedUser);
 			return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);
 		}
@@ -175,5 +228,8 @@ public class UserService {
 			return new ResponseEntity<>(globalResponseData,HttpStatus.NOT_FOUND);
 		}
 	}
+
+
+
 
 }

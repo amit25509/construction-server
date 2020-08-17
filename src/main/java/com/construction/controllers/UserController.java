@@ -32,6 +32,12 @@ public class UserController {
 		return userService.getUserByUsername();
 	}
 	
+	@GetMapping("/getallemployee")
+	public ResponseEntity<GlobalResponseListData> getAllEmployee() {
+		
+		return userService.getAllEmployee();
+	}
+	
 	@PutMapping("/updatebyusername")
 	public ResponseEntity<GlobalResponseData> updateUser(@RequestBody User newUser) {
 		
