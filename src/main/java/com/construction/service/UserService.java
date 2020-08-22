@@ -12,8 +12,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.construction.models.EmployeeData;
 import com.construction.models.UpdatePassword;
 import com.construction.models.User;
+import com.construction.repository.EmployeeDataRepository;
 import com.construction.repository.UserRepository;
 import com.construction.responses.GlobalResponseData;
 import com.construction.responses.GlobalResponseListData;
@@ -23,6 +25,10 @@ public class UserService {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	EmployeeDataRepository employeeDataRepository;
+	
 	GlobalResponseData globalResponseData;
 	
 	GlobalResponseListData globalResponseListData;
@@ -81,9 +87,9 @@ public class UserService {
 	
 
 	
-	//====================UPDATE USER DETAILS BY USERNAME==========================
+	//====================UPDATE USER BASIC DETAILS BY USERNAME==========================
 	
-	public ResponseEntity<GlobalResponseData> updateUser(User updatedUser) {
+	public ResponseEntity<GlobalResponseData> updatedUserBasicDetails(User updatedUserBasicDetails) {
 		// TODO Auto-generated method stub
 		String username = null;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -95,49 +101,31 @@ public class UserService {
 		Optional<User> existingUser = userRepository.findByUsername(username);
 		if (existingUser.isPresent()) {
 			existingUser.map(user -> {
-				if(updatedUser.getName() != null)
-					user.setName(updatedUser.getName());
-				if(updatedUser.getAge() != null)
-					user.setAge(updatedUser.getAge());
-				if(updatedUser.getDob() != null)
-					user.setDob(updatedUser.getDob());
-				if(updatedUser.getEmail() != null)
-					user.setEmail(updatedUser.getEmail());
-				if(updatedUser.getPhone() != null)
-					user.setPhone(updatedUser.getPhone());
-				if(updatedUser.getPhone() != null)
-					user.setUsername(updatedUser.getPhone().toString());
-				if(updatedUser.getPassword() != null)
-					user.setPassword(encoder.encode(updatedUser.getPassword()));
-				if(updatedUser.getLocation() != null)
-					user.setLocation(updatedUser.getLocation());
-				if(updatedUser.getImage() != null)
-					user.setImage(updatedUser.getImage());
-				if(updatedUser.getEmployeeData() != null) {
-					user.setEmployeeData(updatedUser.getEmployeeData());
-				}
+				if(updatedUserBasicDetails.getName() != null)
+					user.setName(updatedUserBasicDetails.getName());
+				if(updatedUserBasicDetails.getAge() != null)
+					user.setAge(updatedUserBasicDetails.getAge());
+				if(updatedUserBasicDetails.getDob() != null)
+					user.setDob(updatedUserBasicDetails.getDob());
+				if(updatedUserBasicDetails.getEmail() != null)
+					user.setEmail(updatedUserBasicDetails.getEmail());
+				if(updatedUserBasicDetails.getPhone() != null)
+					user.setPhone(updatedUserBasicDetails.getPhone());
+				if(updatedUserBasicDetails.getPhone() != null)
+					user.setUsername(updatedUserBasicDetails.getPhone().toString());
+				if(updatedUserBasicDetails.getPassword() != null)
+					user.setPassword(encoder.encode(updatedUserBasicDetails.getPassword()));
+				if(updatedUserBasicDetails.getLocation() != null)
+					user.setLocation(updatedUserBasicDetails.getLocation());
+				if(updatedUserBasicDetails.getImage() != null)
+					user.setImage(updatedUserBasicDetails.getImage());
+				if(updatedUserBasicDetails.getEmployeeData() != null) 
+					user.setEmployeeData(updatedUserBasicDetails.getEmployeeData());
+				
 	            return userRepository.save(user);
 	        });
 			
-			/*
-			 * FOR AVOIDING NULL VALUE FOR SPECIFIC FIELDS
-			User tempUser= existingUser.get();
-			if(newUser.getUsername()==null) {
-				newUser.setUsername(tempUser.getUsername());
-			}
-			if(newUser.getAddressId()==null) {
-				newUser.setAddressId((tempUser.getAddressId()));
-			}
-			if(newUser.getEmployeeData()==null) {
-				newUser.setEmployeeData(tempUser.getEmployeeData());
-			}
-			if(newUser.getEmployeeData().getId()==null) {
-				newUser.setEmployeeData(tempUser.getEmployeeData());
-			}
-			*/
-//			newUser.setUsername(String.valueOf(newUser.getPhone()));
-//			userRepository.save(newUser);
-			globalResponseData =new GlobalResponseData(true, 201, "success",updatedUser);
+			globalResponseData =new GlobalResponseData(true, 201, "success",updatedUserBasicDetails);
 			return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);
 		}
 		else {
@@ -148,6 +136,47 @@ public class UserService {
 	}
 	
 	
+	//====================UPDATE USER PROFESSIONAL DETAILS BY USERNAME==========================
+	
+		public ResponseEntity<GlobalResponseData> updateUserProfessionalDetails(EmployeeData updatedUserProfessionalDetails) {
+			// TODO Auto-generated method stub
+			String username = null;
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			if (!(authentication instanceof AnonymousAuthenticationToken)) {
+				String currentUserName = authentication.getName();
+				username = currentUserName;
+			}
+			System.out.println("========================================"+username);
+			Optional<EmployeeData> existingUserEmpData = Optional.of(userRepository.findByUsername(username).get().getEmployeeData());
+			if (existingUserEmpData.isPresent()) {
+				existingUserEmpData.map(user -> {
+					
+					if(updatedUserProfessionalDetails.getAadharFront() != null) 
+						user.setAadharFront(updatedUserProfessionalDetails.getAadharFront());
+					if(updatedUserProfessionalDetails.getAadharBack() != null) 
+						user.setAadharBack(updatedUserProfessionalDetails.getAadharBack());
+					if(updatedUserProfessionalDetails.getExperience() != null) 
+						user.setExperience(updatedUserProfessionalDetails.getExperience());
+					if(updatedUserProfessionalDetails.getOccupation() != null) 
+						user.setOccupation(updatedUserProfessionalDetails.getOccupation());
+					if(updatedUserProfessionalDetails.getPerDayCharge() != null) 
+						user.setPerDayCharge(updatedUserProfessionalDetails.getPerDayCharge());
+					
+					user.setAvailability(updatedUserProfessionalDetails.isAvailability());
+					
+		            return employeeDataRepository.save(user);
+		        });
+				
+				globalResponseData =new GlobalResponseData(true, 201, "success",updatedUserProfessionalDetails);
+				return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);
+			}
+			else {
+				
+				globalResponseData = new GlobalResponseData(false, 404, "Failure:Result Not Found");
+				return new ResponseEntity<>(globalResponseData,HttpStatus.NOT_FOUND);
+			}
+		}
+		
 	
 //============================= 	
 	

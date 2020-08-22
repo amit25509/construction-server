@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.construction.models.EmployeeData;
 import com.construction.models.UpdatePassword;
 import com.construction.models.User;
 import com.construction.responses.GlobalResponseData;
@@ -33,8 +34,13 @@ public class UserController {
 	}
 	
 	@PutMapping("/updatebyusername")
-	public ResponseEntity<GlobalResponseData> updateUser(@RequestBody User newUser) {
-			return userService.updateUser(newUser);
+	public ResponseEntity<GlobalResponseData> updateUser(@RequestBody User updatedUserBasicDetails) {
+			return userService.updatedUserBasicDetails(updatedUserBasicDetails);
+	}
+	
+	@PutMapping("/updateuserprofessionaldetails")
+	public ResponseEntity<GlobalResponseData> updateUserProfessionalDetails(@RequestBody EmployeeData updatedUserProfessionalDetails) {
+			return userService.updateUserProfessionalDetails(updatedUserProfessionalDetails);
 	}
 	
 	@GetMapping("/getallbyoccupation/{occupationName}")
