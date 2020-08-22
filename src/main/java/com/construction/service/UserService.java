@@ -25,32 +25,31 @@ public class UserService {
 
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	EmployeeDataRepository employeeDataRepository;
-	
+
 	GlobalResponseData globalResponseData;
-	
+
 	GlobalResponseListData globalResponseListData;
-	
+
 	@Autowired
 	PasswordEncoder encoder;
-	
-	//====================GET USER DETAILS BY USERNAME==========================
+
+	// ====================GET USER DETAILS BY USERNAME==========================
 	public ResponseEntity<GlobalResponseData> getUserByUsername() {
 		String username = null;
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			if (!(authentication instanceof AnonymousAuthenticationToken)) {
-				String currentUserName = authentication.getName();
-				username = currentUserName;
-			}
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			String currentUserName = authentication.getName();
+			username = currentUserName;
+		}
 		try {
-			if(username==null)
-			{
-				globalResponseData = new GlobalResponseData(false,401, "Failure: Authentication Failed");
+			if (username == null) {
+				globalResponseData = new GlobalResponseData(false, 401, "Failure: Authentication Failed");
 				return new ResponseEntity<>(globalResponseData, HttpStatus.UNAUTHORIZED);
 			}
-			
+
 			Optional<User> user = userRepository.findByUsername(username);
 			if (!user.isPresent()) {
 				globalResponseData = new GlobalResponseData(false, 404, "Failure:Result Not Found");
@@ -64,13 +63,11 @@ public class UserService {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	
-	
-	//====================GET ALL EMPLOYEE USER==========================
+
+	// ====================GET ALL EMPLOYEE USER==========================
 	public ResponseEntity<GlobalResponseListData> getAllEmployee() {
 		try {
-			
+
 			List<String> user = userRepository.findAllEmployees();
 			if (user.isEmpty()) {
 				globalResponseListData = new GlobalResponseListData(false, 404, "Failure:Result Not Found");
@@ -84,11 +81,10 @@ public class UserService {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
 
-	
-	//====================UPDATE USER BASIC DETAILS BY USERNAME==========================
-	
+	// ====================UPDATE USER BASIC DETAILS BY
+	// USERNAME==========================
+
 	public ResponseEntity<GlobalResponseData> updatedUserBasicDetails(User updatedUserBasicDetails) {
 		// TODO Auto-generated method stub
 		String username = null;
@@ -97,91 +93,84 @@ public class UserService {
 			String currentUserName = authentication.getName();
 			username = currentUserName;
 		}
-		System.out.println("========================================"+username);
+		System.out.println("========================================" + username);
 		Optional<User> existingUser = userRepository.findByUsername(username);
 		if (existingUser.isPresent()) {
 			existingUser.map(user -> {
-				if(updatedUserBasicDetails.getName() != null)
+				if (updatedUserBasicDetails.getName() != null)
 					user.setName(updatedUserBasicDetails.getName());
-				if(updatedUserBasicDetails.getAge() != null)
+				if (updatedUserBasicDetails.getAge() != null)
 					user.setAge(updatedUserBasicDetails.getAge());
-				if(updatedUserBasicDetails.getDob() != null)
+				if (updatedUserBasicDetails.getDob() != null)
 					user.setDob(updatedUserBasicDetails.getDob());
-				if(updatedUserBasicDetails.getEmail() != null)
+				if (updatedUserBasicDetails.getEmail() != null)
 					user.setEmail(updatedUserBasicDetails.getEmail());
-				if(updatedUserBasicDetails.getPhone() != null)
+				if (updatedUserBasicDetails.getPhone() != null)
 					user.setPhone(updatedUserBasicDetails.getPhone());
-				if(updatedUserBasicDetails.getPhone() != null)
+				if (updatedUserBasicDetails.getPhone() != null)
 					user.setUsername(updatedUserBasicDetails.getPhone().toString());
-				if(updatedUserBasicDetails.getPassword() != null)
+				if (updatedUserBasicDetails.getPassword() != null)
 					user.setPassword(encoder.encode(updatedUserBasicDetails.getPassword()));
-				if(updatedUserBasicDetails.getLocation() != null)
+				if (updatedUserBasicDetails.getLocation() != null)
 					user.setLocation(updatedUserBasicDetails.getLocation());
-				if(updatedUserBasicDetails.getImage() != null)
+				if (updatedUserBasicDetails.getImage() != null)
 					user.setImage(updatedUserBasicDetails.getImage());
-				if(updatedUserBasicDetails.getEmployeeData() != null) 
-					user.setEmployeeData(updatedUserBasicDetails.getEmployeeData());
-				
-	            return userRepository.save(user);
-	        });
-			
-			globalResponseData =new GlobalResponseData(true, 201, "success",updatedUserBasicDetails);
+
+				return userRepository.save(user);
+			});
+
+			globalResponseData = new GlobalResponseData(true, 201, "success", updatedUserBasicDetails);
 			return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);
-		}
-		else {
-			
+		} else {
+
 			globalResponseData = new GlobalResponseData(false, 404, "Failure:Result Not Found");
-			return new ResponseEntity<>(globalResponseData,HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(globalResponseData, HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	
-	//====================UPDATE USER PROFESSIONAL DETAILS BY USERNAME==========================
-	
-		public ResponseEntity<GlobalResponseData> updateUserProfessionalDetails(EmployeeData updatedUserProfessionalDetails) {
-			// TODO Auto-generated method stub
-			String username = null;
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			if (!(authentication instanceof AnonymousAuthenticationToken)) {
-				String currentUserName = authentication.getName();
-				username = currentUserName;
-			}
-			System.out.println("========================================"+username);
-			Optional<EmployeeData> existingUserEmpData = Optional.of(userRepository.findByUsername(username).get().getEmployeeData());
-			if (existingUserEmpData.isPresent()) {
-				existingUserEmpData.map(user -> {
-					
-					if(updatedUserProfessionalDetails.getAadharFront() != null) 
-						user.setAadharFront(updatedUserProfessionalDetails.getAadharFront());
-					if(updatedUserProfessionalDetails.getAadharBack() != null) 
-						user.setAadharBack(updatedUserProfessionalDetails.getAadharBack());
-					if(updatedUserProfessionalDetails.getExperience() != null) 
-						user.setExperience(updatedUserProfessionalDetails.getExperience());
-					if(updatedUserProfessionalDetails.getOccupation() != null) 
-						user.setOccupation(updatedUserProfessionalDetails.getOccupation());
-					if(updatedUserProfessionalDetails.getPerDayCharge() != null) 
-						user.setPerDayCharge(updatedUserProfessionalDetails.getPerDayCharge());
-					
-					user.setAvailability(updatedUserProfessionalDetails.isAvailability());
-					
-		            return employeeDataRepository.save(user);
-		        });
-				
-				globalResponseData =new GlobalResponseData(true, 201, "success",updatedUserProfessionalDetails);
-				return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);
-			}
-			else {
-				
-				globalResponseData = new GlobalResponseData(false, 404, "Failure:Result Not Found");
-				return new ResponseEntity<>(globalResponseData,HttpStatus.NOT_FOUND);
-			}
+
+	// ==================UPDATE USER PROFESSIONAL DETAILS BY USERNAME========================
+
+	public ResponseEntity<GlobalResponseData> updateUserProfessionalDetails(
+			EmployeeData updatedUserProfessionalDetails) {
+		String username = null;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			String currentUserName = authentication.getName();
+			username = currentUserName;
 		}
-		
-	
-//============================= 	
-	
+		System.out.println("========================================" + username);
+		Optional<EmployeeData> existingUserEmpData = Optional
+				.of(userRepository.findByUsername(username).get().getEmployeeData());
+		if (existingUserEmpData.isPresent()) {
+			existingUserEmpData.map(user -> {
+				if (updatedUserProfessionalDetails.getAadharFront() != null)
+					user.setAadharFront(updatedUserProfessionalDetails.getAadharFront());
+				if (updatedUserProfessionalDetails.getAadharBack() != null)
+					user.setAadharBack(updatedUserProfessionalDetails.getAadharBack());
+				if (updatedUserProfessionalDetails.getExperience() != null)
+					user.setExperience(updatedUserProfessionalDetails.getExperience());
+				if (updatedUserProfessionalDetails.getOccupation() != null)
+					user.setOccupation(updatedUserProfessionalDetails.getOccupation());
+				if (updatedUserProfessionalDetails.getPerDayCharge() != null)
+					user.setPerDayCharge(updatedUserProfessionalDetails.getPerDayCharge());
+
+				user.setAvailability(updatedUserProfessionalDetails.isAvailability());
+				return employeeDataRepository.save(user);
+			});
+
+			globalResponseData = new GlobalResponseData(true, 201, "success", updatedUserProfessionalDetails);
+			return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);
+
+		} else {
+			globalResponseData = new GlobalResponseData(false, 404, "Failure:Result Not Found");
+			return new ResponseEntity<>(globalResponseData, HttpStatus.NOT_FOUND);
+		}
+	}
+
+//============================= GET EMPLOYEE BY OCCUPATION =============================
+
 	public ResponseEntity<GlobalResponseListData> getByOccupation(String occupationName) {
-		
+
 		try {
 			List<User> users = userRepository.getByOccupation(occupationName);
 
@@ -196,41 +185,36 @@ public class UserService {
 			globalResponseListData = new GlobalResponseListData(false, 500, "Failure:Internal Server Error");
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-	}
 
+	}
 
 //====================UPDATE PASSWORD BY USER==========================
 
 	public ResponseEntity<GlobalResponseData> updatePassword(UpdatePassword updatedPassword) {
-	
-		
+
 		String username = null;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
 			String currentUserName = authentication.getName();
 			username = currentUserName;
 		}
-		
+
 		Optional<User> existingUser = userRepository.findByUsername(username);
-		if(encoder.matches(updatedPassword.getOldPassword(), existingUser.get().getPassword())) {
+		if (encoder.matches(updatedPassword.getOldPassword(), existingUser.get().getPassword())) {
 			if (existingUser.isPresent()) {
-				User user=existingUser.get();
+				User user = existingUser.get();
 				user.setPassword(encoder.encode(updatedPassword.getNewPassword()));
 				userRepository.save(user);
-				globalResponseData =new GlobalResponseData(true, 201, "success",user);
+				globalResponseData = new GlobalResponseData(true, 201, "success", user);
 			}
 			return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);
 		}
-		
+
 		else {
-			
+
 			globalResponseData = new GlobalResponseData(false, 404, "Failure:Result Not Found");
-			return new ResponseEntity<>(globalResponseData,HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(globalResponseData, HttpStatus.NOT_FOUND);
 		}
 	}
-
-
-
 
 }
