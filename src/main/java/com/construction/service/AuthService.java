@@ -60,7 +60,7 @@ public class AuthService {
 	JwtUtils jwtUtils;
 	
 	
-	
+//	======================== LOGIN ========================
 	
 	public ResponseEntity<GlobalResponseData> authenticateUser(LoginRequest loginRequest) {
 		try {
@@ -92,7 +92,7 @@ public class AuthService {
 		
 		
 		
-		
+//	======================== REGISTER ========================	
 	
 	public ResponseEntity<GlobalResponseData> registerUser(SignupRequest signUpRequest) {
 		String userName = String.valueOf(signUpRequest.getPhone());

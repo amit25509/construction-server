@@ -32,25 +32,10 @@ public class UserController {
 		return userService.getUserByUsername();
 	}
 	
-	@GetMapping("/getallemployee")
-	public ResponseEntity<GlobalResponseListData> getAllEmployee() {
-		
-		return userService.getAllEmployee();
-	}
-	
 	@PutMapping("/updatebyusername")
 	public ResponseEntity<GlobalResponseData> updateUser(@RequestBody User newUser) {
-		
 			return userService.updateUser(newUser);
-
 	}
-	
-	@PutMapping("/updatebyid/{id}")
-	public ResponseEntity<GlobalResponseData> updateUserById(@PathVariable("id") Long id, @RequestBody User updatedUser) {
-		
-		return userService.updateUserById(id, updatedUser);
-		
-	}	
 	
 	@GetMapping("/getallbyoccupation/{occupationName}")
 	public ResponseEntity<GlobalResponseListData> getAllUsers(@PathVariable("occupationName") String occupationName) {

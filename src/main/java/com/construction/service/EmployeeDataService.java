@@ -21,38 +21,39 @@ public class EmployeeDataService {
 	@Autowired
 	EmployeeDataRepository employeeDataRepository;
 	GlobalResponseData globalResponseData;
-	
-	
+
+//	======================== UPDATE EMPLOYEE DATA ========================
+
 	public ResponseEntity<GlobalResponseData> updateEmployeeData(Integer id, EmployeeData updateEmployeeData) {
 		// TODO Auto-generated method stub
 		Optional<EmployeeData> existningEmployeeData = employeeDataRepository.findById(id);
 
 		if (existningEmployeeData.isPresent()) {
 			employeeDataRepository.save(updateEmployeeData);
-			globalResponseData =new GlobalResponseData(true, 201, "success",updateEmployeeData);
+			globalResponseData = new GlobalResponseData(true, 201, "success", updateEmployeeData);
 			return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);
-		}
-		else {
-			
+		} else {
+
 			globalResponseData = new GlobalResponseData(false, 404, "Failure:Result Not Found");
-			return new ResponseEntity<>(globalResponseData,HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(globalResponseData, HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
+//	======================== GET EMPLOYEE DATA BY USERNAME ========================
+
 	public ResponseEntity<GlobalResponseData> getEmployeeDataByUsername() {
 		String username = null;
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			if (!(authentication instanceof AnonymousAuthenticationToken)) {
-				String currentUserName = authentication.getName();
-				username = currentUserName;
-			}
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			String currentUserName = authentication.getName();
+			username = currentUserName;
+		}
 		try {
-			if(username==null)
-			{
-				globalResponseData = new GlobalResponseData(false,401, "Failure: Authentication Failed");
+			if (username == null) {
+				globalResponseData = new GlobalResponseData(false, 401, "Failure: Authentication Failed");
 				return new ResponseEntity<>(globalResponseData, HttpStatus.UNAUTHORIZED);
 			}
-			
+
 			List<EmployeeData> employeeData = employeeDataRepository.findEmployeeDataByUsername(username);
 
 			if (employeeData.isEmpty()) {
@@ -68,6 +69,8 @@ public class EmployeeDataService {
 		}
 	}
 
+//	======================== UPDATE EMPLOYEE AVAILABILITY STATUS ========================
+
 	public ResponseEntity<GlobalResponseData> updateAvailability(Boolean newAvailability) {
 		// TODO Auto-generated method stub
 		String username = null;
@@ -76,31 +79,24 @@ public class EmployeeDataService {
 			String currentUserName = authentication.getName();
 			username = currentUserName;
 		}
-		
+
 		try {
-			if(username==null)
-			{
-				globalResponseData = new GlobalResponseData(false,401, "Failure: Authentication Failed");
+			if (username == null) {
+				globalResponseData = new GlobalResponseData(false, 401, "Failure: Authentication Failed");
 				return new ResponseEntity<>(globalResponseData, HttpStatus.UNAUTHORIZED);
 			}
-			if(newAvailability)
-			{
-				employeeDataRepository.updateEmployeeAvailability(username,false);
+			if (newAvailability) {
+				employeeDataRepository.updateEmployeeAvailability(username, false);
 				globalResponseData = new GlobalResponseData(true, 201, "success", null);
 				return new ResponseEntity<>(globalResponseData, HttpStatus.OK);
 			}
-			employeeDataRepository.updateEmployeeAvailability(username,true);
+			employeeDataRepository.updateEmployeeAvailability(username, true);
 			globalResponseData = new GlobalResponseData(true, 201, "success", null);
 			return new ResponseEntity<>(globalResponseData, HttpStatus.OK);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			System.out.println(e);
 			globalResponseData = new GlobalResponseData(false, 500, "Failure:Internal Server Error");
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-		
-		
-		
 	}
-
 }

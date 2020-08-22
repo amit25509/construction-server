@@ -26,6 +26,9 @@ public class CommissionService {
 
 	GlobalResponseListData globalResponseListData;
 	
+	
+//	======================== GET COMMISSION BY COMMISSION ID ========================
+	
 	public ResponseEntity<GlobalResponseData> getCommissionById(int id) {
 			
 			try {
@@ -45,6 +48,8 @@ public class CommissionService {
 				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}
+	
+//	======================== GET ALL COMMISSION ========================
 	
 	public ResponseEntity<GlobalResponseListData> getAllCommissions() {
 		
@@ -66,6 +71,8 @@ public class CommissionService {
 		
 	}
 
+//	======================== GET COMMISSION BY USERNAME ========================
+	
 	public ResponseEntity<GlobalResponseListData> getCommissionsByUsername() {
 		String username = null;
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -128,9 +135,10 @@ public class CommissionService {
 //	}
 
 
+//	======================== ADD COMMISSION ========================
+	
 	public ResponseEntity<GlobalResponseData> addCommission(Commissions add) {
 		try {
-			System.out.println("inside try commission");
 			Commissions commission = commissionRepository.save(new Commissions(
 					add.getBookingId(),
 					add.getTotalCommissionAmount(),
@@ -138,11 +146,9 @@ public class CommissionService {
 					add.getCommissionStatus(),
 					add.getPaidCommissionAmount()
 					)); 
-			System.out.println("inside try commission-2");
 			globalResponseData= new GlobalResponseData(true, 200, "success",commission);
 			return new ResponseEntity<>(globalResponseData, HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println("inside catch commission-2");
 			globalResponseData= new GlobalResponseData(false, 417, "Failure:Data Expectation Failed");
 			return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
 		}

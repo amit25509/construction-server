@@ -21,6 +21,7 @@ import com.construction.responses.GlobalResponseData;
 import com.construction.responses.GlobalResponseListData;
 import com.construction.service.AdminService;
 import com.construction.service.BookingService;
+import com.construction.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @CrossOrigin(origins = "*")
@@ -39,6 +40,9 @@ public class AdminController {
 	
 	@Autowired
 	AdminService adminService;
+	
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	ObjectMapper mapper;
@@ -58,11 +62,15 @@ public class AdminController {
 		return adminService.getAllUsers();
 	}
 	
-	@PutMapping("/updatebyid/{id}")
-	public ResponseEntity<GlobalResponseData> updateUser(@PathVariable("id") Long id, @RequestBody User newUser) {
-		
-			return adminService.updateUser(id, newUser);
+	@GetMapping("/getallemployee")
+	public ResponseEntity<GlobalResponseListData> getAllEmployee() {
+		return userService.getAllEmployee();
 	}
+	
+	@PutMapping("/updatebyid/{id}")
+	public ResponseEntity<GlobalResponseData> updateUserById(@PathVariable("id") Long id, @RequestBody User updatedUser) {
+		return adminService.updateUserById(id, updatedUser);
+	}	
 	
 	@DeleteMapping("/deletebyid/{id}")
 	public ResponseEntity<GlobalResponseData> deleteUserById(@PathVariable("id") Long id) {

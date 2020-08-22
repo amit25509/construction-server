@@ -95,10 +95,14 @@ public class UserService {
 		Optional<User> existingUser = userRepository.findByUsername(username);
 		if (existingUser.isPresent()) {
 			existingUser.map(user -> {
-				user.setName(updatedUser.getName());
-				user.setAge(updatedUser.getAge());
-				user.setDob(updatedUser.getDob());
-				user.setEmail(updatedUser.getEmail());
+				if(updatedUser.getName() != null)
+					user.setName(updatedUser.getName());
+				if(updatedUser.getAge() != null)
+					user.setAge(updatedUser.getAge());
+				if(updatedUser.getDob() != null)
+					user.setDob(updatedUser.getDob());
+				if(updatedUser.getEmail() != null)
+					user.setEmail(updatedUser.getEmail());
 				if(updatedUser.getPhone() != null)
 					user.setPhone(updatedUser.getPhone());
 				if(updatedUser.getPhone() != null)
@@ -107,6 +111,8 @@ public class UserService {
 					user.setPassword(encoder.encode(updatedUser.getPassword()));
 				if(updatedUser.getLocation() != null)
 					user.setLocation(updatedUser.getLocation());
+				if(updatedUser.getImage() != null)
+					user.setImage(updatedUser.getImage());
 				if(updatedUser.getEmployeeData() != null) {
 					user.setEmployeeData(updatedUser.getEmployeeData());
 				}
@@ -143,41 +149,7 @@ public class UserService {
 	
 	
 	
-	//====================UPDATE USER DETAILS BY USER ID==========================
-	
-	public ResponseEntity<GlobalResponseData> updateUserById(Long id, User updatedUser) {
-		// TODO Auto-generated method stub
-		
-		Optional<User> existingUser = userRepository.findById(id);
-		
-		if (existingUser.isPresent()) {
-			existingUser.map(user -> {
-				user.setName(updatedUser.getName());
-				user.setAge(updatedUser.getAge());
-				user.setDob(updatedUser.getDob());
-				user.setEmail(updatedUser.getEmail());
-				if(updatedUser.getIsEnabled() != null)
-					user.setIsEnabled(updatedUser.getIsEnabled());
-				user.setPhone(updatedUser.getPhone());
-				user.setUsername(updatedUser.getPhone().toString());
-				if(updatedUser.getPassword() != null)
-					user.setPassword(encoder.encode(updatedUser.getPassword()));
-				user.setLocation(updatedUser.getLocation());
-				if(updatedUser.getRoles() != null)
-					user.setRoles(updatedUser.getRoles());
-	            return userRepository.save(user);
-	        });
-
-//			userRepository.save(updatedUser);
-			globalResponseData =new GlobalResponseData(true, 201, "success",updatedUser);
-			return new ResponseEntity<>(globalResponseData, HttpStatus.CREATED);
-		}
-		else {
-			
-			globalResponseData = new GlobalResponseData(false, 404, "Failure:Result Not Found");
-			return new ResponseEntity<>(globalResponseData,HttpStatus.NOT_FOUND);
-		}
-	}
+//============================= 	
 	
 	public ResponseEntity<GlobalResponseListData> getByOccupation(String occupationName) {
 		

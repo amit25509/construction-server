@@ -56,6 +56,8 @@ public class BookingService {
 
 	GlobalResponseListData globalResponseListData;
 
+//	=============================GET ALL BOOKING FOR ADMIN =================================
+	
 	public ResponseEntity<GlobalResponseListData> getAllBookings() {
 
 		try {
@@ -76,6 +78,8 @@ public class BookingService {
 
 	}
 
+//	=============================GET ALL BOOKING BY USERNAME =================================
+	
 	public ResponseEntity<GlobalResponseListData> getBookingsByUsername() {
 		String username = null;
 		GrantedAuthority userRoles = null;
@@ -88,7 +92,6 @@ public class BookingService {
 
 			for (Iterator<? extends GrantedAuthority> it = roles.iterator(); it.hasNext();) {
 				userRoles = it.next();
-				System.out.println("=================================================" + userRoles);
 			}
 		}
 
@@ -105,7 +108,7 @@ public class BookingService {
 			}
 
 			if (bookings.isEmpty()) {
-				globalResponseListData = new GlobalResponseListData(false, 204, "Failure:Result Not Found");
+				globalResponseListData = new GlobalResponseListData(false, 204, "Failure:Booking Not Found");
 				return new ResponseEntity<>(globalResponseListData, HttpStatus.NO_CONTENT);
 			} else {
 				globalResponseListData = new GlobalResponseListData(true, 200, "success", bookings);
@@ -118,6 +121,8 @@ public class BookingService {
 		}
 	}
 
+//	=============================ADD BOOKING =================================
+	
 	public ResponseEntity<GlobalResponseData> addBooking(Bookings addBooking) {
 		try {
 
@@ -136,9 +141,6 @@ public class BookingService {
 				User existingUser = userRepository.findByUsername(username).get();
 				addBooking.getAddress().setUser(existingUser);
 			}
-
-			System.out.println(
-					"-----------------------------------------------------------------------------------------------------");
 
 			Bookings bookings = bookingRepository.save(new Bookings(addBooking.getBookingFrom(),
 					addBooking.getBookingTo(), status, daysWorked, addBooking.getUser(), addBooking.getEmployee(),
@@ -159,6 +161,9 @@ public class BookingService {
 		}
 	}
 
+	
+//	=============================GET BOOKING BY ID =================================
+	
 	public ResponseEntity<GlobalResponseData> getBookingById(int id) {
 
 		try {

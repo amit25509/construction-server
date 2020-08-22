@@ -34,13 +34,13 @@ public class Bookings
 	@Column(name="days_worked")
 	private Integer daysWorked;
 	
-	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+	@OneToOne(targetEntity = User.class)
 	@JoinColumn(name="user", referencedColumnName = "Id")
 //	 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 //    @JsonIdentityReference(alwaysAsId = true)
 	private User user;
 	
-	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+	@OneToOne(targetEntity = User.class)
 	@JoinColumn(name="employee", referencedColumnName = "Id")
 //	 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 //    @JsonIdentityReference(alwaysAsId = true)

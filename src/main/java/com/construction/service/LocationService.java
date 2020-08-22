@@ -18,6 +18,8 @@ public class LocationService {
 	LocationsRepository locationRepository;
 	GlobalResponseListData globalResponseListData;
 	
+//	======================== GET ALL LOCATIONS ========================
+	
 	public ResponseEntity<?> getAllLocation(){
 		try
 		{

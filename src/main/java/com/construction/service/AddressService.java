@@ -30,7 +30,7 @@ public class AddressService {
 	UserRepository userRepository;
 	
 	
-	//UPDATE BY ADDRESS BY USERNAME
+	//========================UPDATE BY ADDRESS BY USERNAME========================
 	
 	public ResponseEntity<GlobalResponseData> addAddressByUsername(Address address) {
 		String username = null;
@@ -55,7 +55,7 @@ public class AddressService {
 		}
 	}
 	
-	//UPDATE BY ADDRESS BY ADDRESS_ID	
+	//========================UPDATE BY ADDRESS BY ADDRESS_ID========================	
 	public ResponseEntity<GlobalResponseData> updateAddress(Integer id, Address updateAddress) {
 		String username = null;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -88,7 +88,7 @@ public class AddressService {
 	}
 	
 	
-	//GET BY ADDRESS BY USERNAME
+	//========================GET BY ADDRESS BY USERNAME========================
 	
 	public ResponseEntity<GlobalResponseData> getAddressByUsername() {
 		String username = null;
@@ -120,7 +120,7 @@ public class AddressService {
 	}
 	
 	
-	//UPDATE BY ADDRESS BY USERNAME
+	//========================UPDATE BY ADDRESS BY USERNAME========================
 	
 	public ResponseEntity<GlobalResponseData> updateAddressByUsername(Address updateAddress) {
 		// TODO Auto-generated method stub
@@ -162,6 +162,4 @@ public class AddressService {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
-
 }

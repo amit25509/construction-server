@@ -7,9 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.construction.models.Locations;
 import com.construction.models.Occupation;
-import com.construction.repository.LocationsRepository;
 import com.construction.repository.OccupationRepository;
 import com.construction.responses.GlobalResponseListData;
 
@@ -19,6 +17,8 @@ public class OccupationService {
 	@Autowired
 	OccupationRepository occupationRepository;
 	GlobalResponseListData globalResponseListData;
+	
+//	======================== GET ALL OCCUPATIONS ========================
 	
 	public ResponseEntity<?> getAllOccupations(){
 		try
