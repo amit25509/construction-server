@@ -82,8 +82,8 @@ public class UserService {
 		}
 	}
 
-	// ====================UPDATE USER BASIC DETAILS BY
-	// USERNAME==========================
+	// ====================UPDATE USER BASIC DETAILS BY USERNAME
+	// ==========================
 
 	public ResponseEntity<GlobalResponseData> updatedUserBasicDetails(User updatedUserBasicDetails) {
 		// TODO Auto-generated method stub
@@ -128,7 +128,7 @@ public class UserService {
 		}
 	}
 
-	// ==================UPDATE USER PROFESSIONAL DETAILS BY USERNAME========================
+// ==================UPDATE USER PROFESSIONAL DETAILS BY USERNAME ========================
 
 	public ResponseEntity<GlobalResponseData> updateUserProfessionalDetails(
 			EmployeeData updatedUserProfessionalDetails) {
@@ -150,11 +150,10 @@ public class UserService {
 				if (updatedUserProfessionalDetails.getExperience() != null)
 					user.setExperience(updatedUserProfessionalDetails.getExperience());
 				if (updatedUserProfessionalDetails.getOccupation() != null)
+//					System.out.println("============-------------=========="+updatedUserProfessionalDetails.getOccupation().getOccupationId());
 					user.setOccupation(updatedUserProfessionalDetails.getOccupation());
 				if (updatedUserProfessionalDetails.getPerDayCharge() != null)
 					user.setPerDayCharge(updatedUserProfessionalDetails.getPerDayCharge());
-
-				user.setAvailability(updatedUserProfessionalDetails.isAvailability());
 				return employeeDataRepository.save(user);
 			});
 

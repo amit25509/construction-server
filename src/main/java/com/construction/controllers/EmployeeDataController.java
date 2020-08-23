@@ -31,6 +31,7 @@ public class EmployeeDataController {
 		
 			return employeeDataService.updateEmployeeData(id, updateEmployeeData);
 	}
+	
 	@GetMapping("/getbyusername")
 	public ResponseEntity<GlobalResponseData> getEmployeeDataByByUsername() {
 		
