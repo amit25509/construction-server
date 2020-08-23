@@ -49,7 +49,7 @@ public class Bookings
 	@JoinColumn(name="rating", referencedColumnName = "Id")
 	private Rating rating;
 
-	@OneToOne(targetEntity = Address.class,cascade = CascadeType.MERGE)
+	@OneToOne(targetEntity = Address.class,cascade = CascadeType.ALL)
 	@JoinColumn(name="address", referencedColumnName = "addressId")
 	private Address address;
 	
